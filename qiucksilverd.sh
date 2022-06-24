@@ -14,7 +14,7 @@ sleep 2
 
 # set vars
 if [ ! $NODENAME ]; then
-	read -p "\e[1m\e[32m""Masukan node name""\e[0m: " NODENAME
+	read -p "Masukan node name": " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
 QUICKSILVER_PORT=11
