@@ -6,6 +6,12 @@ echo -e "\e[0m"
 echo " seperti biasa di update dulu ya bang biar gak eror nanti "
 echo -n " klik enter aja bang 😂 !"
 read user
+. ~/.bashrc
+if [ ! $MASA_NODENAME ]; then
+	read -p "Masukkan node name: " MASA_NODENAME
+	echo 'export MASA_NODENAME='$MASA_NODENAME >> $HOME/.bash_profile
+	source ~/.bash_profile
+fi
 echo
 echo -e "\e[1m\e[32m1. Update... \e[0m" && sleep 1
 echo
@@ -15,16 +21,6 @@ echo -e "\e[1m\e[32m2. Install pendukung.. \e[0m" && sleep 1
 echo
 sudo apt install curl build-essential git wget jq make gcc tmux -y
 echo
-
-. ~/.bashrc
-if [ ! $MASA_NODENAME ]; then
-	read -p "Enter node name: " MASA_NODENAME
-	echo 'export MASA_NODENAME='$MASA_NODENAME >> $HOME/.bash_profile
-	source ~/.bash_profile
-fi
-
-# server update
-sudo apt update && sudo apt upgrade -y
 
 # install packages
 sudo apt install curl tar wget clang pkg-config libssl-dev jq build-essential git make ncdu net-tools -y
@@ -111,7 +107,7 @@ echo -e "node key: \e[32m$MASA_NODEKEY\e[39m"
 echo "=================================================="
 
 echo -e "\e[1m\e[32mUntuk membuka geth: \e[0m" 
-echo -e "\e[1m\e[39m    geth attach ipc:$HOME/masa-node-v1.0/data/geth.ipc \n \e[0m" 
+echo -e "\e[1m\e[39mgeth attach ipc:$HOME/masa-node-v1.0/data/geth.ipc \n \e[0m" 
 echo
 echo
 echo
@@ -120,10 +116,10 @@ echo
 echo -ne "${lightgreen}\e[1m\e[32mToday is:\t\t\e[0m${red}" `date`; echo ""
 echo -e "${lightgreen}\e[1m\e[32mKernel Information: \t\e[0m${red}" "Linux 5.10.0-BSA_OS-amd64 x86_64"
 echo -e "\e[1m\e[32mTo view logs: \e[0m" 
-echo -e "\e[1m\e[39m    journalctl -u masad -f \n \e[0m" 
+echo -e "\e[1m\e[39mjournalctl -u masad -f \n \e[0m" 
 
 echo -e "\e[1m\e[32mTo restart: \e[0m" 
-echo -e "\e[1m\e[39m    systemctl restart masad.service \n \e[0m" 
+echo -e "\e[1m\e[39msystemctl restart masad.service \n \e[0m" 
 
 echo -e "Silakan backup nodekey anda : \e[32m$MASA_NODEKEY\e[39m"
 echo -e "Untuk memulihkan di server lain, masukkan kunci simpul Anda ke dalam \e[32m$HOME/masa-node-v1.0/data/geth/nodekey\e[39m and restart service"
