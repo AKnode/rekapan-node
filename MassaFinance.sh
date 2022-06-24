@@ -6,9 +6,11 @@ echo -e "\e[0m"
 echo " seperti biasa di update dulu ya bang biar gak eror nanti "
 echo -n " klik enter aja bang 😂 !"
 read user
+echo
+echo
 . ~/.bashrc
 if [ ! $MASA_NODENAME ]; then
-	read -p "Masukkan node name: " MASA_NODENAME
+	read -p "\e[1m\e[32m Masukkan node name\e[0m: " MASA_NODENAME
 	echo 'export MASA_NODENAME='$MASA_NODENAME >> $HOME/.bash_profile
 	source ~/.bash_profile
 fi
