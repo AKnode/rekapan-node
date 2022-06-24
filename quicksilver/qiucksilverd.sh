@@ -17,11 +17,11 @@ echo
 sudo apt install curl build-essential git wget jq make gcc tmux -y
 echo
 
-echo -e "\e[1m\e[32m4. Membuat Moniker... \e[0m" && sleep 1
+echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
 echo
 # set vars
 if [ ! $NODENAME ]; then
-	read -p "Enter node name: " NODENAME
+	read -p "Nama node mu: " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
 QUICKSILVER_PORT=11
@@ -33,10 +33,10 @@ echo "export QUICKSILVER_PORT=${QUICKSILVER_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 
 echo '🌀 --------------------------'
-echo -e "Your node name: \e[1m\e[32m$NODENAME\e[0m"
-echo -e "Your wallet name: \e[1m\e[32m$WALLET\e[0m"
-echo -e "Your chain name: \e[1m\e[32m$QUICKSILVER_CHAIN_ID\e[0m"
-echo -e "Your port: \e[1m\e[32m$QUICKSILVER_PORT\e[0m"
+echo -e "node name: \e[1m\e[32m$NODENAME\e[0m"
+echo -e "wallet name: \e[1m\e[32m$WALLET\e[0m"
+echo -e "chain : \e[1m\e[32m$QUICKSILVER_CHAIN_ID\e[0m"
+echo -e "port: \e[1m\e[32m$QUICKSILVER_PORT\e[0m"
 echo '----------------------------🌀'
 sleep 2
 
@@ -51,7 +51,7 @@ echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
 go version
 
-echo -e "\e[1m\e[32m3. Downloading and building binaries... \e[0m" && sleep 1
+echo -e "\e[1m\e[32m4. building binaries... \e[0m" && sleep 1
 # download binary
 cd $HOME
 rm quicksilver -rf
@@ -103,7 +103,7 @@ sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.quicksilverd/config/c
 # reset
 quicksilverd tendermint unsafe-reset-all --home $HOME/.quicksilverd
 
-echo -e "\e[1m\e[32m4. Starting service... \e[0m" && sleep 1
+echo -e "\e[1m\e[32m5. Start service... \e[0m" && sleep 1
 # create service
 tee /etc/systemd/system/quicksilverd.service > /dev/null <<EOF
 [Unit]
