@@ -8,9 +8,17 @@ echo " seperti biasa di update dulu ya bang biar gak eror nanti "
 echo -n " klik enter aja bang 😂 !"
 read user
 echo
+echo -e "\e[1m\e[32m1. Update... \e[0m" && sleep 1
+echo
+sudo apt update && sudo apt upgrade -y
+
+echo -e "\e[1m\e[32m2. Install pendukung.. \e[0m" && sleep 1
+echo
+sudo apt install curl build-essential git wget jq make gcc tmux -y
 echo
 
-sleep 2
+echo -e "\e[1m\e[32m4. Membuat Moniker... \e[0m" && sleep 1
+echo
 
 # set vars
 if [ ! $NODENAME ]; then
@@ -32,14 +40,6 @@ echo -e "Your chain name: \e[1m\e[32m$QUICKSILVER_CHAIN_ID\e[0m"
 echo -e "Your port: \e[1m\e[32m$QUICKSILVER_PORT\e[0m"
 echo '================================================='
 sleep 2
-
-echo -e "\e[1m\e[32m1. Updating... \e[0m" && sleep 1
-# update
-sudo apt update && sudo apt upgrade -y
-
-echo -e "\e[1m\e[32m2. Installing... \e[0m" && sleep 1
-# packages
-sudo apt install curl build-essential git wget jq make gcc tmux -y
 
 # install go
 ver="1.18.2"
@@ -133,5 +133,5 @@ echo 'INSTALASI SELESAI  🚀 '
 echo
 echo -ne "${lightgreen}\e[1m\e[32mToday is:\t\t\e[0m${red}" `date`; echo ""
 echo -e "${lightgreen}\e[1m\e[32mKernel Information: \t\e[0m${red}" "Linux 5.10.0-BSA_OS-amd64 x86_64"
-echo -e 'To check logs: \e[1m\e[32mjournalctl -u quicksilverd -f -o cat\e[0m'
-echo -e "To check sync status: \e[1m\e[32mcurl -s localhost:${QUICKSILVER_PORT}657/status | jq .result.sync_info\e[0m"
+echo -e 'untuk mengecek logs: \e[1m\e[32mjournalctl -u seid -f -o cat\e[0m'
+echo -e "untuk mengecek status sync: \e[1m\e[32mseid status 2>&1 | jq .SyncInfo\e[0m"
