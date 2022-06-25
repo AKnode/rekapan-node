@@ -61,9 +61,7 @@ seid tendermint unsafe-reset-all --home $HOME/.sei
 cd $HOME/.sei; rm -rf data wasm
 wget http://173.212.215.104/sei-snap-709000.tar   #( 160 MB)
 tar xvf sei-snap-709000.tar
-cd $HOME/.sei rm -r sei-snap-709000.tar
 wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json
-cd $HOME/.sei 
 echo
 sudo systemctl restart seid.service
 echo
