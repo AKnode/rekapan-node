@@ -60,7 +60,7 @@ echo
 echo -e "\e[1m\e[32m3. Download binaries... \e[0m" && sleep 1
 cd $HOME && rm $HOME/sei-chain -rf
 git clone https://github.com/sei-protocol/sei-chain.git && cd $HOME/sei-chain
-git checkout 1.0.3beta
+git checkout 1.0.2beta
 make install
 mv ~/go/bin/seid /usr/local/bin/seid
 echo
