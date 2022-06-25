@@ -23,7 +23,8 @@ echo -e "\e[1m\e[32m4. update binaries... \e[0m" && sleep 1
 cd $HOME && rm $HOME/sei-chain -rf
 git clone https://github.com/sei-protocol/sei-chain.git
 cd sei-chain
-git checkout 1.0.4beta && make install
+git checkout 1.0.4beta
+make install
 seid version --long | head
 echo
 echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
