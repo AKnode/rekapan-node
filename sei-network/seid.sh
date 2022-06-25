@@ -19,30 +19,7 @@ echo -e "\e[1m\e[32m2. Install pendukung.. \e[0m" && sleep 1
 echo
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt install make clang pkg-config libssl-dev build-essential git jq llvm libudev-dev -y
 echo
-echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
-echo
-# set vars
-if [ ! $NODENAME ]; then
-	read -p "masukan nama nodemu: " NODENAME
-	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
-fi
-SEI_PORT=12
-if [ ! $WALLET ]; then
-	echo "export WALLET=wallet" >> $HOME/.bash_profile
-fi
-echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
-echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
-source $HOME/.bash_profile
-echo
-echo
-echo '🌀 --------------------------'
-echo -e "nama node mu: \e[1m\e[32m$NODENAME\e[0m"
-echo -e "nama wallet mu: \e[1m\e[32m$WALLET\e[0m"
-echo -e "chain-id: \e[1m\e[32m$SEI_CHAIN_ID\e[0m"
-echo -e "port: \e[1m\e[32m$SEI_PORT\e[0m"
-echo '----------------------------🌀'
-sleep 2
-echo
+echo -e "\e[1m\e[32m3. Install ... \e[0m" && sleep 1
 echo
 # install go
 ver="1.18.2"
@@ -55,27 +32,12 @@ echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
 go version
 echo
-echo -e "\e[1m\e[32m4. Update... \e[0m" && sleep 1
-cd $HOME
-sudo rm sei-chain -rf
-git clone https://github.com/sei-protocol/sei-chain.git
-cd sei-chain
-git checkout 1.0.4beta
-make install 
-sudo mv ~/go/bin/seid /usr/local/bin/seid
+git clone https://github.com/sei-protocol/sei-chain.git \
+&& cd sei-chain && git checkout 1.0.4beta && make install \
+&& seid version --long | head
 echo
-# config
-seid config chain-id $SEI_CHAIN_ID
-seid config keyring-backend test
-seid config node tcp://localhost:${SEI_PORT}657
+wget -O $HOME/.sei/config/genesis.json https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json 
 
-# init
-seid init $NODENAME --chain-id $SEI_CHAIN_ID
-
-# download genesis and addrbook
-wget -O $HOME/.sei/config/genesis.json https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json
-echo
-echo -e "\e[1m\e[32m5. Starting service... \e[0m" && sleep 1
 echo "[Unit]
 Description=Seid Node
 After=network.target
@@ -90,7 +52,7 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target" > seid.service \
 && sudo cp seid.service /etc/systemd/system
-echo
+
 seid tendermint unsafe-reset-all --home $HOME/.sei
 
 SNAP_RPC1="http://173.212.215.104:26357" \
@@ -106,7 +68,7 @@ sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
 s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC1,$SNAP_RPC2\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/config/config.toml
-# set peers and seeds
+
 peers="f6c80c797ab4b3161fbf758ed23573c11ea5d559@173.212.215.104:26356"
 sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$peers\"/" $HOME/.sei/config/config.toml
 
@@ -124,7 +86,9 @@ seid tendermint unsafe-reset-all --home $HOME/.sei
 cd $HOME/.sei; rm -rf data wasm
 wget http://173.212.215.104/sei-snap-709000.tar   #( 160 MB)
 tar xvf sei-snap-709000.tar
-wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json 
+cd $HOME/.sei rm -r sei-snap-709000.tar
+wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json
+cd $HOME/.sei 
 echo
 sudo systemctl restart seid.service
 echo
