@@ -11,15 +11,13 @@ echo
 echo -e "\e[1m\e[32m1. Update... \e[0m" && sleep 1
 echo
 sudo apt update && sudo apt upgrade -y
-
+echo
 echo -e "\e[1m\e[32m2. Install pendukung.. \e[0m" && sleep 1
 echo
 sudo apt install curl build-essential git wget jq make gcc tmux -y
 echo
 
 echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
-echo
-echo
 echo
 # set vars
 if [ ! $NODENAME ]; then
@@ -75,16 +73,10 @@ quicksilverd init $NODENAME --chain-id $QUICKSILVER_CHAIN_ID
 wget -qO $HOME/.quicksilverd/config/genesis.json "https://raw.githubusercontent.com/ingenuity-build/testnets/main/killerqueen/genesis.json"
 wget -qO $HOME/.quicksilverd/config/addrbook.json "https://raw.githubusercontent.com/AKnode/rekapan-node/main/quicksilver/addrbook.json"
 
-# reset
-quicksilverd tendermint unsafe-reset-all --home $HOME/.quicksilverd
-
-
 # set peers and seeds
-PEERS="b281289df37c5180f9ff278be5e29964afa0c229@185.56.139.84:26656,4f35ab6008fc46cc50b103a337ec2266400eca2e@148.251.50.79:26656,90f4459126152d21983f42c8e86bc899cd618af6@116.202.15.183:11656,6ac91620bc5338e6f679835cc604769a213d362f@139.59.56.24:36366,f9d2dbf6c80f08d12d1bc8d07ffd3bafa4965160@95.214.55.43:26651,abe7397ff92a4ca61033ceac127b5fc3a9a4217f@65.108.98.218:25095,07bb0fd7af9dc819bb5bb850ea5d870281c3adfa@167.235.74.230:26656"
-sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.quicksilverd/config/config.toml
-# set peers and seeds
-SEEDS="dd3460ec11f78b4a7c4336f22a356fe00805ab64@seed.killerqueen-1.quicksilver.zone:26656,8603d0778bfe0a8d2f8eaa860dcdc5eb85b55982@seed02.killerqueen-1.quicksilver.zone:27676"
-sed -i -e "/seeds =/ s/= .*/= \"$SEEDS\"/"  $HOME/.quicksilverd/config/config.toml
+SEEDS="dd3460ec11f78b4a7c4336f22a356fe00805ab64@seed.killerqueen-1.quicksilver.zone:26656"
+PEERS=""
+sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.quicksilverd/config/config.toml
 
 
 # set custom ports
@@ -110,6 +102,10 @@ sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0uqck\"/" $HOME/.qu
 
 # enable prometheus
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.quicksilverd/config/config.toml
+
+# reset
+quicksilverd tendermint unsafe-reset-all --home $HOME/.quicksilverd
+
 echo
 echo -e "\e[1m\e[32m5. Start service... \e[0m" && sleep 1
 echo
