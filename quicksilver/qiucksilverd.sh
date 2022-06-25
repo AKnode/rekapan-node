@@ -70,6 +70,7 @@ quicksilverd init $NODENAME --chain-id $QUICKSILVER_CHAIN_ID
 
 # download genesis and addrbook
 wget -qO $HOME/.quicksilverd/config/genesis.json "https://raw.githubusercontent.com/ingenuity-build/testnets/main/killerqueen/genesis.json"
+wget -qO $HOME/.quicksilverd/config/addrbook.json "https://raw.githubusercontent.com/AKnode/rekapan-node/main/quicksilver/addrbook.json"
 
 # set peers and seeds
 SEEDS="dd3460ec11f78b4a7c4336f22a356fe00805ab64@seed.killerqueen-1.quicksilver.zone:26656"
