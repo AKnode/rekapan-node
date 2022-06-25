@@ -21,13 +21,13 @@ echo
 echo -e "\e[1m\e[32m3. Install ... \e[0m" && sleep 1
 echo
 # install go
-ver="1.18.2"
-cd $HOME
-wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
-rm "go$ver.linux-amd64.tar.gz"
-echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
-source ~/.bash_profile
-go version
-echo
+wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz \
+&& sudo tar -xvf go1.18.1.linux-amd64.tar.gz && sudo mv go /usr/local \
+&& echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile \
+&& source ~/.bash_profile; go version
+
+rm go1.18.1.linux-amd64.tar.gz
+
+git clone https://github.com/sei-protocol/sei-chain.git \
+&& cd sei-chain && git checkout 1.0.4beta && make install \
+&& seid version
