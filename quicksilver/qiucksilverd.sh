@@ -72,9 +72,12 @@ quicksilverd init $NODENAME --chain-id $QUICKSILVER_CHAIN_ID
 wget -qO $HOME/.quicksilverd/config/genesis.json "https://raw.githubusercontent.com/ingenuity-build/testnets/main/killerqueen/genesis.json"
 wget -qO $HOME/.quicksilverd/config/addrbook.json "https://raw.githubusercontent.com/AKnode/rekapan-node/main/quicksilver/addrbook.json"
 
+# reset
+quicksilverd tendermint unsafe-reset-all --home $HOME/.quicksilverd
+
 # set peers and seeds
 SEEDS="dd3460ec11f78b4a7c4336f22a356fe00805ab64@seed.killerqueen-1.quicksilver.zone:26656"
-PEERS=""
+PEERS="1999a4a804a1946ab10def5c71eec02415bda479@161.97.82.203:26256"
 sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.quicksilverd/config/config.toml
 
 
@@ -102,29 +105,42 @@ sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0uqck\"/" $HOME/.qu
 # enable prometheus
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.quicksilverd/config/config.toml
 
-# reset
-quicksilverd tendermint unsafe-reset-all --home $HOME/.quicksilverd
-
 echo -e "\e[1m\e[32m5. Start service... \e[0m" && sleep 1
 # create service
 sudo tee /etc/systemd/system/quicksilverd.service > /dev/null <<EOF
 [Unit]
-Description=quicksilver
-After=network-online.target
+Description=quicksilverd
+After=network.target
 [Service]
+Type=simple
 User=$USER
-ExecStart=$(which quicksilverd) --home $HOME/.quicksilverd start
+ExecStart=$(which quicksilverd) start
 Restart=on-failure
-RestartSec=3
+RestartSec=10
 LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
 
+SNAP_RPC1="https://quicksilver-rpc.theamsolutions.info:443" \
+SNAP_RPC2="https://quicksilver-rpc.theamsolutions.info:443"
+
+LATEST_HEIGHT=$(curl -s $SNAP_RPC2/block | jq -r .result.block.header.height); \
+BLOCK_HEIGHT=$((LATEST_HEIGHT - 1000)); \
+TRUST_HASH=$(curl -s "$SNAP_RPC2/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+
+echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH
+
+sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
+s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC1,$SNAP_RPC2\"| ; \
+s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
+s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.quicksilverd/config/config.toml
+
+
 # start service
 sudo systemctl daemon-reload
-sudo systemctl enable quicksilverd
-sudo systemctl restart quicksilverd
+sudo systemctl enable quicksilverd.service
+sudo systemctl restart quicksilverd.service
 echo
 echo
 echo
@@ -132,4 +148,4 @@ echo 'INSTALASI SELESAI  🚀 '
 echo
 echo -ne "${lightgreen}\e[1m\e[32mToday is:\t\t\e[0m${red}" `date`; echo ""
 echo -e "${lightgreen}\e[1m\e[32mKernel Information: \t\e[0m${red}" "Linux 5.10.0-BSA_OS-amd64 x86_64"
-echo -e 'untuk mengecek logs: \e[1m\e[32mjournalctl -u quicksilverd -f -o cat\e[0m'
+echo -e 'untuk mengecek logs: \e[1m\e[32mjournalctl -u quicksilverd.service -f -o cat\e[0m'
