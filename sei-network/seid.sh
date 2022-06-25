@@ -10,6 +10,13 @@ echo -e "\e[0m"
 echo " seperti biasa di update dulu ya bang biar gak eror nanti "
 echo -n " klik enter aja bang 😂 !"
 read user
+echo -e "\e[1m\e[32m4. update binaries... \e[0m" && sleep 1
+cd $HOME && rm $HOME/sei-chain -rf
+git clone https://github.com/sei-protocol/sei-chain.git
+cd sei-chain
+git checkout 1.0.4beta
+make install
+seid version
 echo
 echo -e "\e[1m\e[32m1. Update... \e[0m" && sleep 1
 echo
@@ -18,16 +25,6 @@ sudo apt update && sudo apt upgrade -y
 echo -e "\e[1m\e[32m2. Install pendukung.. \e[0m" && sleep 1
 echo
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt install make clang pkg-config libssl-dev build-essential git jq llvm libudev-dev -y
-echo
-echo -e "\e[1m\e[32m4. update binaries... \e[0m" && sleep 1
-cd $HOME && rm $HOME/sei-chain -rf
-git clone https://github.com/sei-protocol/sei-chain.git
-cd sei-chain
-git checkout 1.0.4beta
-sleep 1
-make build
-sleep 1
-seid version
 echo
 echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
 echo
