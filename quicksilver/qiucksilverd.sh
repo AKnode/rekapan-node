@@ -106,7 +106,7 @@ quicksilverd tendermint unsafe-reset-all --home $HOME/.quicksilverd
 
 echo -e "\e[1m\e[32m5. Start service... \e[0m" && sleep 1
 # create service
-tee /etc/systemd/system/quicksilverd.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/quicksilverd.service > /dev/null <<EOF
 [Unit]
 Description=quicksilver
 After=network-online.target
