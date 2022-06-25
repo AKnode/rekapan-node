@@ -24,8 +24,10 @@ cd $HOME && rm $HOME/sei-chain -rf
 git clone https://github.com/sei-protocol/sei-chain.git
 cd sei-chain
 git checkout 1.0.4beta
+sleep 1
 make build
-seid version --long | head
+sleep 1
+seid version
 echo
 echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
 echo
