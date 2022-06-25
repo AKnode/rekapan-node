@@ -31,6 +31,3 @@ echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
 go version
 echo
-git clone https://github.com/sei-protocol/sei-chain.git \
-&& cd sei-chain && git checkout 1.0.4beta && make install \
-&& seid version --long | head
