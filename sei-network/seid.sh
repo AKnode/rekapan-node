@@ -118,7 +118,7 @@ sudo systemctl enable seid.service
 sudo systemctl daemon-reload
 sudo systemctl restart seid
 
-sudo systemctl stop seid.service; \
+sudo systemctl stop seid.service
 seid tendermint unsafe-reset-all --home $HOME/.sei
 
 cd $HOME/.sei; rm -rf data wasm
