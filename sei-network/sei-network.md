@@ -17,7 +17,6 @@ if [ ! -f "/usr/local/go/bin/go" ]; then
   . <(curl -s "https://raw.githubusercontent.com/nodejumper-org/cosmos-utils/main/utils/go_install.sh")
   . .bash_profile
 fi
-go version
 ```
 #### Install **interchain**
 ```
@@ -31,23 +30,29 @@ seid version # 1.0.4beta
 ```
 #### Add variables
 # replace aknode dengan moniker anda,
+```
 seid config chain-id sei-testnet-2
 seid init aknode --chain-id sei-testnet-2 -o
+```
 ```
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
 sha256sum $HOME/.sei/config/genesis.json # aec481191276a4c5ada2c3b86ac6c8aad0cea5c4aa6440314470a2217520e2cc
 ```
+```
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
 sha256sum $HOME/.sei/config/addrbook.json # 9058b83fca36c2c09fb2b7c04293382084df0960b4565090c21b65188816ffa6
+```
 ```
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
 seeds=""
 peers="f4b1aa3416073a4493de7889505fc19777326825@rpc1-testnet.nodejumper.io:28656"
 sed -i -e 's|^seeds *=.*|seeds = "'$seeds'"|; s|^persistent_peers *=.*|persistent_peers = "'$peers'"|' $HOME/.sei/config/config.toml
 ```
+```
 sed -i 's|pruning = "default"|pruning = "custom"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-keep-recent = "0"|pruning-keep-recent = "100"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-interval = "0"|pruning-interval = "10"|g' $HOME/.sei/config/app.toml
+```
 ```
 sudo tee /etc/systemd/system/seid.service > /dev/null << EOF
 [Unit]
@@ -63,7 +68,9 @@ LimitNOFILE=10000
 WantedBy=multi-user.target
 EOF
 ```
+```
 seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+```
 ```
 SNAP_RPC="http://rpc1-testnet.nodejumper.io:28657"
 LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
