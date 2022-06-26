@@ -13,10 +13,12 @@ sudo apt install -y make gcc jq curl git
 ```
 #### Install GO
 ```
-if [ ! -f "/usr/local/go/bin/go" ]; then
-  . <(curl -s "https://raw.githubusercontent.com/nodejumper-org/cosmos-utils/main/utils/go_install.sh")
-  . .bash_profile
-fi
+wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
+sudo tar -xvf go1.18.1.linux-amd64.tar.gz
+sudo mv go /usr/local
+echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
+source ~/.bash_profile
+go version
 ```
 #### Install **interchain**
 ```
