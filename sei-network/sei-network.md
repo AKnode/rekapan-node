@@ -2,9 +2,9 @@
 sei-network testnet GUIDE
 
 
-## Chain: `sei-testnet-2`
-- Official link link is [here](https://github.com/ingenuity-build/testnets/tree/main/killerqueen/kqcosmos-1)
-- [Explorer](https://testnet.explorer.testnet.run/kqcosmos-1)
+## sei-network testnet GUIDE: `sei-testnet-2`
+- Official link link is [here](https://docs.seinetwork.io/nodes-and-validators/joining-testnets)
+- Link explorer[Explorer](https://sei.explorers.guru/)
 # Instructions
 #### Manual Installation
 ```
@@ -97,5 +97,39 @@ sudo systemctl restart seid
 ### Logs and status
 Logs
 ```
+sudo journalctl -u seid -f --no-hostname -o cat
+```
+
+- 
+ UNTUK BISA MELOMPATI BLOCK
+- 
+
+# Snapshot
+
+# height: 774,857; size: 6.7GB;
+
+```
+sudo apt update
+sudo apt install snapd -y
+sudo snap install lz4
+```
+
+```
+sudo systemctl stop seid
+seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+```
+
+```
+cd $HOME/.sei
+rm -rf data
+```
+
+```
+SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/sei-testnet/ | egrep -o ">sei-testnet-2.*\.tar.lz4" | tr -d ">")
+curl https://snapshots1-testnet.nodejumper.io/sei-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
+```
+
+```
+sudo systemctl restart seid
 sudo journalctl -u seid -f --no-hostname -o cat
 ```
