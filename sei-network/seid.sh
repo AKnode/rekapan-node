@@ -7,10 +7,53 @@ echo " 📌 Jangan Lupa di follow biar semangat bantu kalian 😅"
 echo " 📌 Twitter  : @rehan_ssf"
 echo " 📌 Telegram : @paperhang"
 echo -e "\e[0m"
+echo " seperti biasa di update dulu ya bang biar gak eror nanti "
 echo -n " klik enter aja bang 😂 !"
 read user
 echo
+echo
+echo -e "\e[1m\e[32m1. Update... \e[0m" && sleep 1
+echo
+sudo apt update && sudo apt upgrade -y
 
+echo -e "\e[1m\e[32m2. Install pendukung.. \e[0m" && sleep 1
+echo
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt install make clang pkg-config libssl-dev build-essential git jq llvm libudev-dev -y
+echo
+echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
+echo
+# set vars
+if [ ! $NODENAME ]; then
+	read -p "Nama node mu: " NODENAME
+	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+fi
+QUICKSILVER_PORT=11
+if [ ! $WALLET ]; then
+	echo "export WALLET=wallet" >> $HOME/.bash_profile
+fi
+echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
+echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
+source $HOME/.bash_profile
+
+echo '🌀 --------------------------'
+echo -e "node name: \e[1m\e[32m$NODENAME\e[0m"
+echo -e "wallet name: \e[1m\e[32m$WALLET\e[0m"
+echo -e "chain : \e[1m\e[32m$SEI_CHAIN_ID\e[0m"
+echo -e "port: \e[1m\e[32m$SEI_PORT\e[0m"
+echo '----------------------------🌀'
+sleep 2
+echo -e "\e[1m\e[32m3. Install ... \e[0m" && sleep 1
+# install go
+wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz \
+&& sudo tar -xvf go1.18.1.linux-amd64.tar.gz && sudo mv go /usr/local \
+&& echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile \
+&& source ~/.bash_profile; go version
+
+rm go1.18.1.linux-amd64.tar.gz
+
+git clone https://github.com/sei-protocol/sei-chain.git \
+&& cd sei-chain && git checkout 1.0.4beta && make install \
+&& seid version
 wget -O $HOME/.sei/config/genesis.json https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json 
 echo "[Unit]
 
