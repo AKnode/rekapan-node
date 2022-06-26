@@ -1,6 +1,6 @@
 
 sei-network testnet GUIDE
-
+@paperhang
 
 ## sei-network testnet GUIDE: `sei-testnet-2`
 - Official link link is [here](https://docs.seinetwork.io/nodes-and-validators/joining-testnets)
