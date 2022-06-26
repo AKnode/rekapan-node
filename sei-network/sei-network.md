@@ -102,6 +102,38 @@ Logs
 sudo journalctl -u seid -f --no-hostname -o cat
 ```
 
+
+# Wallet
+
+Add New Wallet
+```
+seid keys add wallet
+```
+Recover Existing Wallet
+```
+seid keys add wallet --recover
+```
+List All Wallets
+```
+seid keys list
+```
+Delete Wallet
+```
+seid keys delete wallet
+```
+
+
+# Validator Info
+```
+seid status 2>&1 | jq .ValidatorInfo
+```
+# Node info
+```
+seid status 2>&1 | jq .NodeInfo
+```
+
+
+
 - 
  UNTUK BISA MELOMPATI BLOCK
 - 
