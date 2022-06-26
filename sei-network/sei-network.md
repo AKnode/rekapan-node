@@ -89,26 +89,6 @@ s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/config/config.toml
 ```
-#### Comment out the line `log_level=info`
-```
-sed -i.bak 's/^log_level/# log_level/' $HOME/.ica/config/config.toml
-```
-### Сreate a service file
-```
-sudo tee <<EOF >/dev/null /etc/systemd/system/icad.service
-[Unit]
-Description=ICA Cosmos daemon
-After=network-online.target
-[Service]
-User=$USER
-ExecStart=$(which icad) start --log_level=info
-Restart=on-failure
-RestartSec=3
-LimitNOFILE=65535
-[Install]
-WantedBy=multi-user.target
-EOF
-```
 ## Start the service to synchronize from first block
 ```
 sudo systemctl daemon-reload
