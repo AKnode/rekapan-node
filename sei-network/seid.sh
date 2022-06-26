@@ -117,3 +117,7 @@ echo -e 'untuk mengecek logs: \e[1m\e[32msudo journalctl -u seid.service -f -o c
 echo -e "untuk mengecek status sync: \e[1m\e[32mseid status 2>&1 | jq .SyncInfo\e[0m"
 echo
 export PS1="\[\033[1;33m\]\u\[\033[1;37m\]@\[\033[1;32m\]\h\[\033[1;37m\]:\[\033[1;31m\]\w \[\033[1;36m\]\\$ \[\033[0m\]";
+
+
+
+
