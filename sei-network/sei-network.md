@@ -28,8 +28,7 @@ git checkout 1.0.4beta
 make install
 seid version # 1.0.4beta
 ```
-#### Add variables
-# replace aknode dengan moniker anda,
+# replace aknode dengan moniker anda
 ```
 seid config chain-id sei-testnet-2
 seid init aknode --chain-id sei-testnet-2 -o
@@ -77,12 +76,12 @@ LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
 BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
 TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
 ```
-Recover wallet created for killerquin-1. Type your saved seed phease.
+
 ```
 echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH
 ```
 
-#### Pruning settings
+
 ```
 sed -i -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
 s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
