@@ -13,7 +13,10 @@ echo "   ▒   ▒▒ ░░ ░▒ ▒░░ ░░   ░ ▒░  ░ ▒ ▒�
 echo "   ░   ▒   ░ ░░ ░    ░   ░ ░ ░ ░ ░ ▒   ░ ░  ░    ░   ";
 echo "       ░  ░░  ░            ░     ░ ░     ░       ░  ░";
 echo "                                       ░             ";
+echo -e "\e[0m"
+echo -e "\033[0;32m"
 echo "Telegram : @Paperhang                                ";
+echo "Twitter  : @rehan_ssf                                ";
 echo -e "\e[0m"
 sleep 2
 echo
@@ -31,7 +34,8 @@ echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
 echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 echo
-echo '🌀 ================INFO=================== 🌀'
+echo '||================INFO===================||'
+echo
 echo -e "YOU NODE NAME : \e[1m\e[34m$NODENAME\e[0m"
 echo -e "YOU WALLET NAME : \e[1m\e[34m$WALLET\e[0m"
 echo -e "YOU CHAIN ID : \e[1m\e[34m$SEI_CHAIN_ID\e[0m"
