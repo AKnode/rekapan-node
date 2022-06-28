@@ -17,38 +17,33 @@ echo "@Paperhang                                           ";
 echo -e "\e[0m"
 sleep 2
 echo
-echo
-echo -e "\e[1m\e[32m1. Update... \e[0m" && sleep 1
-echo
-sudo apt update && sudo apt upgrade -y
-
-echo -e "\e[1m\e[32m2. Install pendukung.. \e[0m" && sleep 1
-echo
-sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt install make clang pkg-config libssl-dev build-essential git jq llvm libudev-dev -y
-echo
-echo -e "\e[1m\e[32m3. Membuat Moniker... \e[0m" && sleep 1
-echo
-# set vars
+# Set Vars
 if [ ! $NODENAME ]; then
-	read -p "Nama node mu: " NODENAME
+	read -p "NODENAME 👉 : " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
 QUICKSILVER_PORT=11
 if [ ! $WALLET ]; then
-	echo "export WALLET=wallet" >> $HOME/.bash_profile
+    read -p "WALLET 👉 : " WALLET
+	echo "export WALLET=$WALLET" >> $HOME/.bash_profile
 fi
 echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
 echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 
-echo '🌀 --------------------------'
-echo -e "node name: \e[1m\e[32m$NODENAME\e[0m"
-echo -e "wallet name: \e[1m\e[32m$WALLET\e[0m"
-echo -e "chain : \e[1m\e[32m$SEI_CHAIN_ID\e[0m"
-echo -e "port: \e[1m\e[32m$SEI_PORT\e[0m"
-echo '----------------------------🌀'
+echo '🌀 ================INFO=================== 🌀'
+echo -e "YOU NODE NAME : \e[1m\e[32m$NODENAME\e[0m"
+echo -e "YOU WALLET NAME : \e[1m\e[32m$WALLET\e[0m"
+echo -e "YOU CHAIN ID : \e[1m\e[32m$SEI_CHAIN_ID\e[0m"
 sleep 2
-echo -e "\e[1m\e[32m3. Install ... \e[0m" && sleep 1
+echo
+echo -e "\e[1m\e[33m1. Update... \e[0m" && sleep 1
+echo
+sudo apt update && sudo apt upgrade -y
+echo
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt install make clang pkg-config libssl-dev build-essential git jq llvm libudev-dev -y
+
+echo -e "\e[1m\e[33m2. Install ... \e[0m" && sleep 1
 # install go
 wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz \
 && sudo tar -xvf go1.18.1.linux-amd64.tar.gz && sudo mv go /usr/local \
