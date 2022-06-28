@@ -48,6 +48,7 @@ echo
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt install make clang pkg-config libssl-dev build-essential git jq llvm libudev-dev -y
 
 echo -e "\e[1m\e[33m2. Install ... \e[0m" && sleep 1
+
 # install go
 wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz \
 && sudo tar -xvf go1.18.1.linux-amd64.tar.gz && sudo mv go /usr/local \
@@ -106,13 +107,27 @@ sudo systemctl restart seid
 sudo systemctl stop seid.service
 seid tendermint unsafe-reset-all --home $HOME/.sei
 
-cd $HOME/.sei; rm -rf data wasm
-wget http://173.212.215.104/sei-snap-709000.tar   #( 160 MB)
-tar xvf sei-snap-709000.tar
-wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json
-echo
 sudo systemctl restart seid.service
-echo
+
+# append nodejumper peer
+nj_peer="f4b1aa3416073a4493de7889505fc19777326825@rpc1-testnet.nodejumper.io:28656"
+sed -i 's|^\bpersistent_peers *=.*"\b|persistent_peers = \"'$nj_peer',|' $HOME/.sei/config/config.toml
+
+# install lz4, if needed
+sudo apt update
+sudo apt install snapd -y
+sudo snap install lz4
+
+sudo systemctl stop seid
+seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+
+cd $HOME/.sei
+rm -rf data
+
+SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/sei-testnet/ | egrep -o ">sei-testnet-2.*\.tar.lz4" | tr -d ">")
+curl https://snapshots1-testnet.nodejumper.io/sei-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
+
+sudo systemctl restart seid
 echo
 echo 'INSTALASI SELESAI  🚀 '
 echo
