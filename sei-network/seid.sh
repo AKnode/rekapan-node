@@ -22,12 +22,12 @@ sleep 2
 echo
 # Set Vars
 if [ ! $NODENAME ]; then
-	read -p "\e[1m\e[34mNODENAME\e[0m 👉  : " NODENAME
+	read -p "NODENAME 👉  : " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
 QUICKSILVER_PORT=11
 if [ ! $WALLET ]; then
-    read -p "\e[1m\e[34mWALLET\e[0m 👉  : " WALLET
+    read -p "WALLET 👉  : " WALLET
 	echo "export WALLET=$WALLET" >> $HOME/.bash_profile
 fi
 echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
