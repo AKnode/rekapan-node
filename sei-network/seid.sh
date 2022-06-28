@@ -27,7 +27,7 @@ if [ ! $NODENAME ]; then
 fi
 QUICKSILVER_PORT=11
 if [ ! $WALLET ]; then
-    read -p "WALLET 👉  : " WALLET
+    read -p "NAME WALLET 👉  : " WALLET
 	echo "export WALLET=$WALLET" >> $HOME/.bash_profile
 fi
 echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
