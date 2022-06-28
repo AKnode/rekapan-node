@@ -13,28 +13,28 @@ echo "   ▒   ▒▒ ░░ ░▒ ▒░░ ░░   ░ ▒░  ░ ▒ ▒�
 echo "   ░   ▒   ░ ░░ ░    ░   ░ ░ ░ ░ ░ ▒   ░ ░  ░    ░   ";
 echo "       ░  ░░  ░            ░     ░ ░     ░       ░  ░";
 echo "                                       ░             ";
-echo "@Paperhang                                           ";
+echo "Telegram : @Paperhang                                ";
 echo -e "\e[0m"
 sleep 2
 echo
 # Set Vars
 if [ ! $NODENAME ]; then
-	read -p "NODENAME 👉 : " NODENAME
+	read -p "\e[1m\e[34mNODENAME\e[0m 👉  : " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
 QUICKSILVER_PORT=11
 if [ ! $WALLET ]; then
-    read -p "WALLET 👉 : " WALLET
+    read -p "\e[1m\e[34mWALLET\e[0m 👉  : " WALLET
 	echo "export WALLET=$WALLET" >> $HOME/.bash_profile
 fi
 echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
 echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
-
+echo
 echo '🌀 ================INFO=================== 🌀'
-echo -e "YOU NODE NAME : \e[1m\e[32m$NODENAME\e[0m"
-echo -e "YOU WALLET NAME : \e[1m\e[32m$WALLET\e[0m"
-echo -e "YOU CHAIN ID : \e[1m\e[32m$SEI_CHAIN_ID\e[0m"
+echo -e "YOU NODE NAME : \e[1m\e[34m$NODENAME\e[0m"
+echo -e "YOU WALLET NAME : \e[1m\e[34m$WALLET\e[0m"
+echo -e "YOU CHAIN ID : \e[1m\e[34m$SEI_CHAIN_ID\e[0m"
 sleep 2
 echo
 echo -e "\e[1m\e[33m1. Update... \e[0m" && sleep 1
