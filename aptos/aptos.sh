@@ -63,7 +63,7 @@ else
 	echo ""
 fi
 if [ ! $APTOS_NODENAME ]; then
-read -p "Enter node name: " APTOS_NODENAME
+read -p "Enter your node name: " APTOS_NODENAME
 echo 'export APTOS_NODENAME='\"${APTOS_NODENAME}\" >> $HOME/.bash_profile
 fi
 echo 'source $HOME/.bashrc' >> $HOME/.bash_profile
