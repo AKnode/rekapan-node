@@ -1,8 +1,10 @@
-# rekapan-node
-@paperhang
+### social-media
+
+telegram : @paperhang
+twitter  : @rehan_ssf
 
 
-#### Sei auto install
+#Sei auto install
 ```
 sudo apt update && sudo apt upgrade -y
 ```
