@@ -9,7 +9,7 @@ sei-network testnet GUIDE
 #### Manual Installation
 ```
 sudo apt update && apt upgrade -y
-sudo apt install -y make gcc jq curl git
+sudo apt install -y make gcc jq curl git make
 ```
 
 ## Setting up vars
@@ -33,8 +33,8 @@ source $HOME/.bash_profile
 
 #### Install GO
 ```
-wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
-sudo tar -xvf go1.18.1.linux-amd64.tar.gz
+wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
+sudo tar -xvf go1.18.3.linux-amd64.tar.gz
 sudo mv go /usr/local
 echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
