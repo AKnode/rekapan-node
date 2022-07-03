@@ -146,8 +146,36 @@ seid keys delete wallet
 ```
 seid status 2>&1 | jq .ValidatorInfo
 ```
-# Node info
 ```
 seid status 2>&1 | jq .NodeInfo
+```
+
+
+
+# Snapshot 
+```
+sudo systemctl stop seid.service && sleep 1
+seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+
+
+
+pruning="custom"; \
+pruning_keep_recent="100"; \
+pruning_keep_every="0"; \
+pruning_interval="10"; \
+sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/.sei/config/app.toml; \
+sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/.sei/config/app.toml; \
+sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/.sei/config/app.toml; \
+sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.sei/config/app.toml
+
+cd $HOME/.sei; rm -rf data wasm
+
+wget http://173.212.215.104/snap-1161625.tar
+
+tar xvf snap-1161625.tar
+
+wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json
+
+sudo systemctl restart seid.service && sudo journalctl -u seid.service -f -o cat
 ```
 
