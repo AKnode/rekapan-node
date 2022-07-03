@@ -50,7 +50,7 @@ git checkout 1.0.5beta
 make install
 seid version
 ```
-# replace aknode dengan moniker anda
+# set moniker
 ```
 seid init $NODENAME --chain-id sei-testnet-2 -o
 ```
