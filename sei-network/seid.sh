@@ -69,32 +69,26 @@ git checkout 1.0.5beta
 make install
 seid version # 1.0.5beta
 
-# config
-seid config chain-id $SEI_CHAIN_ID
-seid init $NODENAME --chain-id $SEI_CHAIN_ID -o
+# replace nodejumper with your own moniker, if you'd like
+seid config chain-id sei-testnet-2
+seid init $NODENAME --chain-id sei-testnet-2 -o
 
-echo
-# download genesis and addrbook
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
-sha256sum $HOME/.sei/config/genesis.json
-curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
-sha256sum $HOME/.sei/config/addrbook.json
+sha256sum $HOME/.sei/config/genesis.json # aec481191276a4c5ada2c3b86ac6c8aad0cea5c4aa6440314470a2217520e2cc
 
-# set peers and seeds
+curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
+sha256sum $HOME/.sei/config/addrbook.json # 9058b83fca36c2c09fb2b7c04293382084df0960b4565090c21b65188816ffa6
+
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
 seeds=""
 peers="6a60f171e8b0c0f0c6a0e5cebd6d3d340764c2f5@rpc1-testnet.nodejumper.io:28656"
 sed -i -e 's|^seeds *=.*|seeds = "'$seeds'"|; s|^persistent_peers *=.*|persistent_peers = "'$peers'"|' $HOME/.sei/config/config.toml
-echo
-# config pruning
+
+# in case of pruning
 sed -i 's|pruning = "default"|pruning = "custom"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-keep-recent = "0"|pruning-keep-recent = "100"|g' $HOME/.sei/config/app.toml
-sed -i 's|pruning-interval = "0"|pruning-interval = "10"|g' $HOME/.sei/config/app.toml\
-echo
+sed -i 's|pruning-interval = "0"|pruning-interval = "10"|g' $HOME/.sei/config/app.toml
 
-echo -e "\e[1m\e[31m[+] Starting service... \e[0m" && sleep 1
-echo
-# create service
 sudo tee /etc/systemd/system/seid.service > /dev/null << EOF
 [Unit]
 Description=Sei Protocol Node
@@ -109,31 +103,31 @@ LimitNOFILE=10000
 WantedBy=multi-user.target
 EOF
 
-# reset
-seid tendermint unsafe-reset-all
-echo
+seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+
 SNAP_RPC="http://rpc1-testnet.nodejumper.io:28657"
 LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
 BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
 TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
-echo
-echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH && sleep 2
-echo
+
+echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH
+
 sed -i -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
 s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/config/config.toml
-echo
+
 sudo systemctl daemon-reload
 sudo systemctl enable seid
-sudo systemctl restart seid && sleep 1
+sudo systemctl restart seid
+
 echo
 source $HOME/.bash_profile
 echo
 echo
 echo 'INSTALASI SELESAI  🚀 '
 echo
-echo -e 'untuk mengecek logs: \e[1m\e[32msudo journalctl -u seid.service -f -o cat\e[0m'
+echo -e 'untuk mengecek logs: \e[1m\e[32msudo journalctl -u seid -f --no-hostname -o cat\e[0m'
 echo -e "untuk mengecek status sync: \e[1m\e[32mseid status 2>&1 | jq .SyncInfo\e[0m"
 
 
