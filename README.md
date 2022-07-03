@@ -1,6 +1,6 @@
-## Chain: `kqcosmos-1`
-- Discord link is [here](https://github.com/ingenuity-build/testnets/tree/main/killerqueen/kqcosmos-1)
-- Twitter [here](https://testnet.explorer.testnet.run/kqcosmos-1)
+## NODE NODE AN : `node`
+- Discord link is [here](https://discord.gg/mSecguCyht)
+- Twitter [here](https://twitter.com/rehan_ssf)
 - Telegram @paperhang
 - 
 # Instructions
