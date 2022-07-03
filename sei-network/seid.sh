@@ -123,7 +123,9 @@ s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/confi
 
 sudo systemctl daemon-reload
 sudo systemctl enable seid
-sudo systemctl restart seid
+sudo systemctl restart seid && sleep 1
+
+source $HOME/.bash_profile
 
 echo
 echo 'INSTALASI SELESAI  🚀 '
