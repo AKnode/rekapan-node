@@ -8,7 +8,7 @@ sei-network testnet GUIDE
 # Instructions
 #### Manual Installation
 ```
-sudo apt update
+sudo apt update && apt upgrade -y
 sudo apt install -y make gcc jq curl git
 ```
 
