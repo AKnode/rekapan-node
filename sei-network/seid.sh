@@ -68,18 +68,18 @@ cd sei-chain || return
 git checkout 1.0.5beta
 make install
 seid version # 1.0.5beta
-echo
+
 # config
 seid config chain-id $SEI_CHAIN_ID
 seid init $NODENAME --chain-id $SEI_CHAIN_ID -o
-echo
+
 echo
 # download genesis and addrbook
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
 sha256sum $HOME/.sei/config/genesis.json
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
 sha256sum $HOME/.sei/config/addrbook.json
-echo
+
 # set peers and seeds
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
 seeds=""
