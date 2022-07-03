@@ -105,23 +105,34 @@ seid.service && sudo cp seid.service /etc/systemd/system
 
 seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
 
-SNAP_RPC="http://rpc1-testnet.nodejumper.io:28657"
-LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
-BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
-TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
-
-echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH
-
-sed -i -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
-s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
-s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
-s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/config/config.toml
-
 source $HOME/.bash_profile
 
 sudo systemctl daemon-reload
 sudo systemctl enable seid
 sudo systemctl restart seid
+
+sudo systemctl stop seid.service && sleep 1
+
+# pruning settings
+pruning="custom"; \
+pruning_keep_recent="100"; \
+pruning_keep_every="0"; \
+pruning_interval="10"; \
+sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/.sei/config/app.toml; \
+sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/.sei/config/app.toml; \
+sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/.sei/config/app.toml; \
+sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.sei/config/app.toml
+
+cd $HOME/.sei; rm -rf data wasm
+
+wget http://173.212.215.104/snap-1161625.tar
+
+tar xvf snap-1161625.tar
+
+wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json
+
+sudo systemctl restart seid.service
+
 
 echo
 echo
