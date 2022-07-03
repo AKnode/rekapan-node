@@ -21,20 +21,23 @@ echo -e "\e[0m"
 sleep 2
 echo
 #update
-echo -e "\e[1m\e[37m[+] Update && Dependencies... \e[0m" && sleep 1
+echo -e "\e[1m\e[31m[+] Update && Dependencies... \e[0m" && sleep 1
+echo
 sudo apt update && sudo apt upgrade -y
 sudo apt install tzdata git ca-certificates curl build-essential libssl-dev pkg-config libclang-dev cmake jq -y --no-install-recommends
 sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.23.1/yq_linux_amd64 && sudo chmod +x /usr/local/bin/yq
 echo
 
 #install rust
-echo -e "\e[1m\e[37m[+] install rust... \e[0m" && sleep 1
+echo -e "\e[1m\e[31m[+] install rust... \e[0m" && sleep 1
+echo
 sudo curl https://sh.rustup.rs -sSf | sh -s -- -y
 source $HOME/.cargo/env
 echo
 
 #Download and build Sui binaries
-echo -e "\e[1m\e[37m[+] Download and build Sui binaries... \e[0m" && sleep 1
+echo -e "\e[1m\e[31m[+] Download and build Sui binaries... \e[0m" && sleep 1
+echo
 sudo mkdir -p /var/sui
 cd $HOME && rm sui -rf
 git clone https://github.com/MystenLabs/sui.git && cd sui
@@ -46,7 +49,7 @@ sudo mv ~/sui/target/release/sui-node /usr/local/bin/
 echo
 
 #Set configuration
-echo -e "\e[1m\e[37m[+] Set configuration... \e[0m" && sleep 1
+echo -e "\e[1m\e[31m[+] Set configuration... \e[0m" && sleep 1
 wget -O /var/sui/genesis.blob https://github.com/MystenLabs/sui-genesis/raw/main/devnet/genesis.blob
 sudo cp crates/sui-config/data/fullnode-template.yaml /var/sui/fullnode.yaml
 sudo yq e -i '.db-path="/var/sui/db"' /var/sui/fullnode.yaml \
@@ -82,5 +85,5 @@ sudo systemctl restart suid
 
 echo
 echo 'finished installing  🚀 '
-echo -e 'cek sui node status: \e[1m\e[37mservice suid status\e[0m'
-echo -e "cek node logs: \e[1m\e[37mjournalctl -u suid -f -o cat\e[0m"
+echo -e 'cek sui node status: \e[1m\e[31mservice suid status\e[0m'
+echo -e "cek node logs: \e[1m\e[31mjournalctl -u suid -f -o cat\e[0m"
