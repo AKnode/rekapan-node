@@ -2,7 +2,7 @@
 #!/bin/sh
 
 
-echo -e "\033[0;34m"
+echo -e "\033[0;35m"
 echo "  ▄▄▄       ██ ▄█▀ ███▄    █  ▒█████  ▓█████▄ ▓█████ "; 
 echo " ▒████▄     ██▄█▒  ██ ▀█   █ ▒██▒  ██▒▒██▀ ██▌▓█   ▀ "; 
 echo " ▒██  ▀█▄  ▓███▄░ ▓██  ▀█ ██▒▒██░  ██▒░██   █▌▒███   "; 
@@ -14,7 +14,7 @@ echo "   ░   ▒   ░ ░░ ░    ░   ░ ░ ░ ░ ░ ▒   ░ ░  
 echo "       ░  ░░  ░            ░     ░ ░     ░       ░  ░";
 echo "                                       ░             ";
 echo -e "\e[0m"
-echo -e "\033[0;32m"
+echo -e "\033[0;35m"
 echo "Telegram : @Paperhang                                ";
 echo "Twitter  : @rehan_ssf                                ";
 echo -e "\e[0m"
@@ -50,8 +50,8 @@ sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt ins
 echo -e "\e[1m\e[33m2. Install ... \e[0m" && sleep 1
 
 # install go
-wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz \
-&& sudo tar -xvf go1.18.1.linux-amd64.tar.gz && sudo mv go /usr/local \
+wget https://go.dev/dl/go1.18.2.linux-amd64.tar.gz \
+&& sudo tar -xvf go1.18.2.linux-amd64.tar.gz && sudo mv go /usr/local \
 && echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile \
 && source ~/.bash_profile; go version
 
@@ -77,7 +77,7 @@ sha256sum $HOME/.sei/config/addrbook.json # 9058b83fca36c2c09fb2b7c04293382084df
 
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
 seeds=""
-peers="f4b1aa3416073a4493de7889505fc19777326825@rpc1-testnet.nodejumper.io:28656"
+PEERS="16d8ba786f4994d0b9655b22e3692d5d79a8b150@80.82.215.233:26656,8b5cc701e87db926ce2b7829c643976eb0d8bbea@135.181.59.162:19656"
 sed -i -e 's|^seeds *=.*|seeds = "'$seeds'"|; s|^persistent_peers *=.*|persistent_peers = "'$peers'"|' $HOME/.sei/config/config.toml
 
 # in case of pruning
@@ -123,22 +123,22 @@ seid tendermint unsafe-reset-all --home $HOME/.sei
 sudo systemctl restart seid.service
 
 # append nodejumper peer
-nj_peer="f4b1aa3416073a4493de7889505fc19777326825@rpc1-testnet.nodejumper.io:28656"
-sed -i 's|^\bpersistent_peers *=.*"\b|persistent_peers = \"'$nj_peer',|' $HOME/.sei/config/config.toml
+#nj_peer="f4b1aa3416073a4493de7889505fc19777326825@rpc1-testnet.nodejumper.io:28656"
+#sed -i 's|^\bpersistent_peers *=.*"\b|persistent_peers = \"'$nj_peer',|' $HOME/.sei/config/config.toml
 
 # install lz4, if needed
-sudo apt update
-sudo apt install snapd -y
-sudo snap install lz4
+#sudo apt update
+#sudo apt install snapd -y
+#sudo snap install lz4
 
-sudo systemctl stop seid
-seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+#sudo systemctl stop seid
+#seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
 
-cd $HOME/.sei
-rm -rf data
+#cd $HOME/.sei
+#rm -rf data
 
-SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/sei-testnet/ | egrep -o ">sei-testnet-2.*\.tar.lz4" | tr -d ">")
-curl https://snapshots1-testnet.nodejumper.io/sei-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
+#SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/sei-testnet/ | egrep -o ">sei-testnet-2.*\.tar.lz4" | tr -d ">")
+#curl https://snapshots1-testnet.nodejumper.io/sei-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
 
 sudo systemctl restart seid
 echo
