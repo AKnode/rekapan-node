@@ -11,6 +11,26 @@ sei-network testnet GUIDE
 sudo apt update
 sudo apt install -y make gcc jq curl git
 ```
+
+## Setting up vars
+Here you have to put name of your moniker (validator) that will be visible in explorer
+```
+NODENAME=<YOUR_MONIKER>
+```
+
+Save and import variables into system
+```
+SEI_PORT=12
+echo "export NODENAME=$NODENAME" >> $HOME/.bash_profile
+if [ ! $WALLET ]; then
+	echo "export WALLET=wallet" >> $HOME/.bash_profile
+fi
+echo "export SEI_CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
+echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
+source $HOME/.bash_profile
+```
+
+
 #### Install GO
 ```
 wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
