@@ -92,16 +92,16 @@ sed -i 's|pruning-interval = "0"|pruning-interval = "10"|g' $HOME/.sei/config/ap
 sudo tee /etc/systemd/system/seid.service > /dev/null << EOF
 [Unit]
 Description=Sei Protocol Node
-After=network-online.target
+After=network.target
 [Service]
 User=$USER
 ExecStart=$(which seid) start
 Restart=on-failure
-RestartSec=10
-LimitNOFILE=10000
+LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
+seid.service && sudo cp seid.service /etc/systemd/system
 
 seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
 
