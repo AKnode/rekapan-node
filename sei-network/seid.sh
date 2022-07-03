@@ -117,12 +117,12 @@ s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/config/config.toml
 
+source $HOME/.bash_profile
+
 sudo systemctl daemon-reload
 sudo systemctl enable seid
 sudo systemctl restart seid
 
-echo
-source $HOME/.bash_profile
 echo
 echo
 echo 'INSTALASI SELESAI  🚀 '
