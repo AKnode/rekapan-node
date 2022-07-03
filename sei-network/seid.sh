@@ -36,9 +36,9 @@ source $HOME/.bash_profile
 echo
 echo '||================INFO===================||'
 echo
-echo -e "YOU NODE NAME : \e[1m\e[34m$NODENAME\e[0m"
-echo -e "YOU WALLET NAME : \e[1m\e[34m$WALLET\e[0m"
-echo -e "YOU CHAIN ID : \e[1m\e[34m$SEI_CHAIN_ID\e[0m"
+echo -e "YOU NODE NAME : \e[1m\e[32m$NODENAME\e[0m"
+echo -e "YOU WALLET NAME : \e[1m\e[32m$WALLET\e[0m"
+echo -e "YOU CHAIN ID : \e[1m\e[32m$SEI_CHAIN_ID\e[0m"
 sleep 2
 echo
 echo -e "\e[1m\e[31m[+] Update && Dependencies... \e[0m" && sleep 1
@@ -79,13 +79,13 @@ curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2
 sha256sum $HOME/.sei/config/genesis.json
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
 sha256sum $HOME/.sei/config/addrbook.json
-
+echo
 # set peers and seeds
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
 seeds=""
 peers="6a60f171e8b0c0f0c6a0e5cebd6d3d340764c2f5@rpc1-testnet.nodejumper.io:28656"
 sed -i -e 's|^seeds *=.*|seeds = "'$seeds'"|; s|^persistent_peers *=.*|persistent_peers = "'$peers'"|' $HOME/.sei/config/config.toml
-
+echo
 # config pruning
 sed -i 's|pruning = "default"|pruning = "custom"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-keep-recent = "0"|pruning-keep-recent = "100"|g' $HOME/.sei/config/app.toml
