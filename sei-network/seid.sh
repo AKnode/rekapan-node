@@ -91,6 +91,7 @@ sed -i 's|pruning = "default"|pruning = "custom"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-keep-recent = "0"|pruning-keep-recent = "100"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-interval = "0"|pruning-interval = "10"|g' $HOME/.sei/config/app.toml\
 echo
+
 echo -e "\e[1m\e[31m[+] Starting service... \e[0m" && sleep 1
 echo
 # create service
@@ -107,7 +108,7 @@ LimitNOFILE=10000
 [Install]
 WantedBy=multi-user.target
 EOF
-echo
+
 # reset
 seid tendermint unsafe-reset-all
 echo
