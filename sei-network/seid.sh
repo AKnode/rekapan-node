@@ -46,7 +46,7 @@ echo
 sudo apt update && sudo apt upgrade -y
 echo
 sudo apt install -y make gcc jq curl git
-
+echo
 # install go
 ver="1.18.2"
 cd $HOME
@@ -57,7 +57,7 @@ rm "go$ver.linux-amd64.tar.gz"
 echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
 go version
-
+echo
 echo -e "\e[1m\e[31m[+] build binary... \e[0m" && sleep 1
 echo
 # download binary
@@ -68,11 +68,12 @@ cd sei-chain || return
 git checkout 1.0.5beta
 make install
 seid version # 1.0.5beta
-
+echo
 # config
 seid config chain-id $SEI_CHAIN_ID
 seid init $NODENAME --chain-id $SEI_CHAIN_ID -o
-
+echo
+echo
 # download genesis and addrbook
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
 sha256sum $HOME/.sei/config/genesis.json
@@ -89,8 +90,9 @@ sed -i -e 's|^seeds *=.*|seeds = "'$seeds'"|; s|^persistent_peers *=.*|persisten
 sed -i 's|pruning = "default"|pruning = "custom"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-keep-recent = "0"|pruning-keep-recent = "100"|g' $HOME/.sei/config/app.toml
 sed -i 's|pruning-interval = "0"|pruning-interval = "10"|g' $HOME/.sei/config/app.toml\
-
+echo
 echo -e "\e[1m\e[31m[+] Starting service... \e[0m" && sleep 1
+echo
 # create service
 sudo tee /etc/systemd/system/seid.service > /dev/null << EOF
 [Unit]
@@ -105,28 +107,28 @@ LimitNOFILE=10000
 [Install]
 WantedBy=multi-user.target
 EOF
-
+echo
 # reset
-seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
-
+seid tendermint unsafe-reset-all
+echo
 SNAP_RPC="http://rpc1-testnet.nodejumper.io:28657"
 LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
 BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
 TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
-
+echo
 echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH && sleep 2
-
+echo
 sed -i -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
 s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/config/config.toml
-
+echo
 sudo systemctl daemon-reload
 sudo systemctl enable seid
 sudo systemctl restart seid && sleep 1
-
+echo
 source $HOME/.bash_profile
-
+echo
 echo
 echo 'INSTALASI SELESAI  🚀 '
 echo
