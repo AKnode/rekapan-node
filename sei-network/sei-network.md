@@ -89,7 +89,7 @@ WantedBy=multi-user.target
 EOF
 ```
 ```
-seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+seid tendermint unsafe-reset-all
 ```
 ```
 SNAP_RPC="http://rpc1-testnet.nodejumper.io:28657"
@@ -143,6 +143,9 @@ seid keys delete wallet
 
 
 # Validator Info
+```
+seid status 2>&1 | jq .SyncInfo
+```
 ```
 seid status 2>&1 | jq .ValidatorInfo
 ```
