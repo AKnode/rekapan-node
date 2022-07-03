@@ -32,7 +32,7 @@ seid version
 ```
 # replace aknode dengan moniker anda
 ```
-seid init #NODENAME --chain-id sei-testnet-2 -o
+seid init $NODENAME --chain-id sei-testnet-2 -o
 ```
 ```
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
