@@ -2,7 +2,7 @@
 #!/bin/sh
 
 
-echo -e "\033[0;35m"
+echo -e "\033[1;33m"
 echo "  ▄▄▄       ██ ▄█▀ ███▄    █  ▒█████  ▓█████▄ ▓█████ "; 
 echo " ▒████▄     ██▄█▒  ██ ▀█   █ ▒██▒  ██▒▒██▀ ██▌▓█   ▀ "; 
 echo " ▒██  ▀█▄  ▓███▄░ ▓██  ▀█ ██▒▒██░  ██▒░██   █▌▒███   "; 
@@ -14,7 +14,7 @@ echo "   ░   ▒   ░ ░░ ░    ░   ░ ░ ░ ░ ░ ▒   ░ ░  
 echo "       ░  ░░  ░            ░     ░ ░     ░       ░  ░";
 echo "                                       ░             ";
 echo -e "\e[0m"
-echo -e "\033[0;35m"
+echo -e "\033[1;33m"
 echo "Telegram : @Paperhang                                ";
 echo "Twitter  : @rehan_ssf                                ";
 echo -e "\e[0m"
@@ -77,8 +77,8 @@ sha256sum $HOME/.sei/config/addrbook.json # 9058b83fca36c2c09fb2b7c04293382084df
 
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
 seeds=""
-PEERS="16d8ba786f4994d0b9655b22e3692d5d79a8b150@80.82.215.233:26656,8b5cc701e87db926ce2b7829c643976eb0d8bbea@135.181.59.162:19656"
-sed -i -e 's|^seeds *=.*|seeds = "'$seeds'"|; s|^persistent_peers *=.*|persistent_peers = "'$peers'"|' $HOME/.sei/config/config.toml
+peers="6a60f171e8b0c0f0c6a0e5cebd6d3d340764c2f5@rpc1-testnet.nodejumper.io:28656"
+sed -i 's|^persistent_peers *=.*|persistent_peers = "'$peers'"|' $HOME/.sei/config/config.toml
 
 # in case of pruning
 sed -i 's|pruning = "default"|pruning = "custom"|g' $HOME/.sei/config/app.toml
