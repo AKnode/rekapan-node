@@ -22,10 +22,9 @@ echo
 #update
 echo -e "\e[1m\e[31m[+] Download Snapshot... \e[0m" && sleep 1
 echo
+seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book && sleep 1
 
 sudo systemctl stop seid.service && sleep 1
-
-seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book && sleep 1
 
 # pruning settings
 pruning="custom"; \
