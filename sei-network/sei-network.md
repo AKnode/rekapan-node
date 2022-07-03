@@ -26,22 +26,21 @@ cd || return
 rm -rf sei-chain
 git clone https://github.com/sei-protocol/sei-chain.git
 cd sei-chain || return
-git checkout 1.0.4beta
+git checkout 1.0.5beta
 make install
-seid version # 1.0.4beta
+seid version
 ```
 # replace aknode dengan moniker anda
 ```
-seid config chain-id sei-testnet-2
-seid init aknode --chain-id sei-testnet-2 -o
+seid init #NODENAME --chain-id sei-testnet-2 -o
 ```
 ```
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
-sha256sum $HOME/.sei/config/genesis.json # aec481191276a4c5ada2c3b86ac6c8aad0cea5c4aa6440314470a2217520e2cc
+sha256sum $HOME/.sei/config/genesis.json
 ```
 ```
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
-sha256sum $HOME/.sei/config/addrbook.json # 9058b83fca36c2c09fb2b7c04293382084df0960b4565090c21b65188816ffa6
+sha256sum $HOME/.sei/config/addrbook.json
 ```
 ```
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
