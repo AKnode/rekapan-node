@@ -116,6 +116,25 @@ sudo systemctl daemon-reload
 sudo systemctl enable anoned
 sudo systemctl restart anoned
 
+
+echo
+echo -e "\e[1m\e[31m[+] snapshot download... \e[0m" && sleep 1
+echo
+sudo apt update
+sudo apt install snapd -y
+sudo snap install lz4
+
+sudo systemctl stop anoned
+anoned unsafe-reset-all
+
+cd $HOME/.anone
+rm -rf data
+
+SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/another1-testnet/ | egrep -o ">anone-testnet-1.*\.tar.lz4" | tr -d ">")
+curl https://snapshots1-testnet.nodejumper.io/another1-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
+
+sudo systemctl restart anoned
+
 echo -e 'successful installation'
 echo -e 'to check logs: \e[1m\e[32msudo journalctl -u anoned -f --no-hostname -o cat\e[0m'
 echo -e "to check sync status: \e[1m\e[32manoned status 2>&1 | jq .SyncInfo\e[0m"
