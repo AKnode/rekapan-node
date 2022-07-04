@@ -5,10 +5,24 @@
 - 
 # Instructions
 
-# Another auto install
+# Another auto installation
 ```
 wget -q -O another-1.sh https://raw.githubusercontent.com/AKnode/rekapan-node/main/Another-1/another-1.sh && chmod +x another-1.sh && sudo /bin/bash another-1.sh
 ```
+after installation
+```
+source $HOME/.bash_profile
+```
+validator info
+```
+anoned status 2>&1 | jq .ValidatorInfo
+
+anoned status 2>&1 | jq .SyncInfo
+
+anoned status 2>&1 | jq .NodeInfo
+```
+
+
 
 ### create your wallet
 Add New Wallet
@@ -88,4 +102,10 @@ anoned tx staking unbond <YOUR_VALOPER_ADDRESS> 1000000uan1 --from wallet --chai
 Send
 ```
 anoned tx bank send wallet <TO_WALLET_ADDRESS> 1000000uan1 --from wallet --chain-id anone-testnet-1 --fees 2000uan1 --gas auto -y 
+```
+
+# Governance
+Vote proposal
+```
+anoned tx gov vote <proposal id> yes/no --from wallet --chain-id anone-testnet-1 --fees 2000uan1 --gas auto -y 
 ```
