@@ -4,7 +4,7 @@
 - Telegram @paperhang
 - 
 <p align="center">
-  <img height="100" height="auto" src="https://raw.githubusercontent.com/AKnode/rekapan-node/main/img/AK%20NODES.png">
+  <img height="200" height="auto" src="https://raw.githubusercontent.com/AKnode/rekapan-node/main/img/AK%20NODES.png">
 </p>
 # Instructions
 
