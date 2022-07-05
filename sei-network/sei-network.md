@@ -42,11 +42,11 @@ go version
 ```
 #### Install **interchain**
 ```
-cd || return
+cd $HOME
 rm -rf sei-chain
 git clone https://github.com/sei-protocol/sei-chain.git
-cd sei-chain || return
-git checkout 1.0.5beta
+cd sei-chain
+git checkout 1.0.6beta
 make install
 seid version
 ```
