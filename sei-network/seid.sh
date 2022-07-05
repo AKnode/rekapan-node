@@ -61,11 +61,11 @@ echo
 echo -e "\e[1m\e[31m[+] build binary... \e[0m" && sleep 1
 echo
 # download binary
-cd || return
+cd $HOME
 rm -rf sei-chain
 git clone https://github.com/sei-protocol/sei-chain.git
-cd sei-chain || return
-git checkout 1.0.5beta
+cd sei-chain
+git checkout 1.0.6beta
 make install
 seid version # 1.0.5beta
 
@@ -111,27 +111,21 @@ sudo systemctl daemon-reload
 sudo systemctl enable seid
 sudo systemctl restart seid
 
-sudo systemctl stop seid.service && sleep 1
 
-# pruning settings
-pruning="custom"; \
-pruning_keep_recent="100"; \
-pruning_keep_every="0"; \
-pruning_interval="10"; \
-sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/.sei/config/app.toml; \
-sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/.sei/config/app.toml; \
-sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/.sei/config/app.toml; \
-sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.sei/config/app.toml
+sudo apt update
+sudo apt install snapd -y
+sudo snap install lz4
 
-cd $HOME/.sei; rm -rf data wasm
+sudo systemctl stop seid
+seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
 
-wget http://173.212.215.104/snap-1161625.tar
+cd $HOME/.sei
+rm -rf data
 
-tar xvf snap-1161625.tar
+SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/sei-testnet/ | egrep -o ">sei-testnet-2.*\.tar.lz4" | tr -d ">")
+curl https://snapshots1-testnet.nodejumper.io/sei-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
 
-wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json
-
-sudo systemctl restart seid.service
+sudo systemctl restart seid
 
 
 echo
