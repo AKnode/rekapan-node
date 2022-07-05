@@ -160,5 +160,5 @@ sudo systemctl restart strided
 
 echo
 echo -e "Your STRIDE node \e[32minstalled and works\e[39m!"
-echo -e "status sync: \e[1m\e[32mseid status 2>&1 | jq .SyncInfo\e[0m"
-echo -e 'logs: \e[1m\e[32msudo journalctl -u seid -f --no-hostname -o cat\e[0m'
+echo -e "status sync: \e[1m\e[32mstrided status 2>&1 | jq .SyncInfo\e[0m"
+echo -e 'logs: \e[1m\e[32msudo journalctl -u strided -f --no-hostname -o cat\e[0m'
