@@ -157,28 +157,23 @@ seid status 2>&1 | jq .NodeInfo
 
 # Snapshot 
 ```
-sudo systemctl stop seid.service && sleep 1
+# install lz4, if needed
+sudo apt update
+sudo apt install snapd -y
+sudo snap install lz4
+
+
+
+sudo systemctl stop seid
 seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
 
+cd $HOME/.sei
+rm -rf data
 
+SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/sei-testnet/ | egrep -o ">sei-testnet-2.*\.tar.lz4" | tr -d ">")
+curl https://snapshots1-testnet.nodejumper.io/sei-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
 
-pruning="custom"; \
-pruning_keep_recent="100"; \
-pruning_keep_every="0"; \
-pruning_interval="10"; \
-sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/.sei/config/app.toml; \
-sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/.sei/config/app.toml; \
-sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/.sei/config/app.toml; \
-sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.sei/config/app.toml
-
-cd $HOME/.sei; rm -rf data wasm
-
-wget http://173.212.215.104/snap-1161625.tar
-
-tar xvf snap-1161625.tar
-
-wget -q -O $HOME/.sei/config/addrbook.json http://173.212.215.104/addrbook.json
-
-sudo systemctl restart seid.service && sudo journalctl -u seid.service -f -o cat
+sudo systemctl restart seid
+sudo journalctl -u seid -f --no-hostname -o cat
 ```
 
