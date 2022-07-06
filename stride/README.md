@@ -3,8 +3,23 @@
 - Twitter [here](https://twitter.com/rehan_ssf)
 - Telegram @paperhang
 - 
-# Instructions
+## Hardware Requirements
+Like any Cosmos-SDK chain, the hardware requirements are pretty modest.
 
+### Minimum Hardware Requirements
+ - 4x CPUs; the faster clock speed the better
+ - 8GB RAM
+ - 100GB of storage (SSD or NVME)
+ - Permanent Internet connection (traffic will be minimal during mainnet; 10Mbps will be plenty - for production at least 100Mbps is expected)
+
+### Recommended Hardware Requirements 
+ - 4x CPUs; the faster clock speed the better
+ - 32GB RAM
+ - 200GB of storage (SSD or NVME)
+ - Permanent Internet connection (traffic will be minimal during mainnet; 10Mbps will be plenty - for production at least 100Mbps is expected)
+
+## Set up your stride fullnode
+# Instructions
 # stride auto installation
 ```
 wget -q -O stride.sh https://raw.githubusercontent.com/AKnode/rekapan-node/main/stride/stride.sh && chmod +x stride.sh && sudo /bin/bash stride.sh
