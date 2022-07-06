@@ -101,6 +101,7 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
+
 seid.service && sudo cp seid.service /etc/systemd/system
 
 seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
