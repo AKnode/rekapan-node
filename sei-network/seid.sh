@@ -124,6 +124,8 @@ rm -rf data
 SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/sei-testnet/ | egrep -o ">sei-testnet-2.*\.tar.lz4" | tr -d ">")
 curl https://snapshots1-testnet.nodejumper.io/sei-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf -
 
+source $HOME/.bash_profile
+
 sudo systemctl restart seid
 
 
