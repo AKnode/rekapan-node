@@ -25,7 +25,7 @@ if [ ! $NODENAME ]; then
 	read -p "NODENAME 👉  : " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
-QUICKSILVER_PORT=11
+SEI_PORT=12
 if [ ! $WALLET ]; then
     read -p "NAME WALLET 👉  : " WALLET
 	echo "export WALLET=$WALLET" >> $HOME/.bash_profile
