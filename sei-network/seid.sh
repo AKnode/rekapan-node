@@ -48,12 +48,9 @@ echo
 sudo apt install curl build-essential git wget jq make gcc tmux -y
 echo
 # install go
-ver="1.18.2"
-cd $HOME
-wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
-rm "go$ver.linux-amd64.tar.gz"
+wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
+sudo tar -xvf go1.18.3.linux-amd64.tar.gz
+sudo mv go /usr/local
 echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
 go version
@@ -67,17 +64,16 @@ git clone https://github.com/sei-protocol/sei-chain.git
 cd sei-chain
 git checkout 1.0.6beta
 make install
-seid version # 1.0.5beta
+seid version
 
 # replace nodejumper with your own moniker, if you'd like
-seid config chain-id sei-testnet-2
 seid init $NODENAME --chain-id sei-testnet-2 -o
 
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
-sha256sum $HOME/.sei/config/genesis.json # aec481191276a4c5ada2c3b86ac6c8aad0cea5c4aa6440314470a2217520e2cc
+sha256sum $HOME/.sei/config/genesis.json
 
 curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
-sha256sum $HOME/.sei/config/addrbook.json # 9058b83fca36c2c09fb2b7c04293382084df0960b4565090c21b65188816ffa6
+sha256sum $HOME/.sei/config/addrbook.json
 
 sed -i 's|^minimum-gas-prices *=.*|minimum-gas-prices = "0.0001usei"|g' $HOME/.sei/config/app.toml
 SEEDS=""
@@ -92,19 +88,31 @@ sed -i 's|pruning-interval = "0"|pruning-interval = "10"|g' $HOME/.sei/config/ap
 sudo tee /etc/systemd/system/seid.service > /dev/null << EOF
 [Unit]
 Description=Sei Protocol Node
-After=network.target
+After=network-online.target
 [Service]
 User=$USER
 ExecStart=$(which seid) start
 Restart=on-failure
-LimitNOFILE=65535
+RestartSec=10
+LimitNOFILE=10000
 [Install]
 WantedBy=multi-user.target
 EOF
 
-seid tendermint unsafe-reset-all --home $HOME/.sei --keep-addr-book
+seid tendermint unsafe-reset-all
 
-source $HOME/.bash_profile
+
+SNAP_RPC="http://rpc1-testnet.nodejumper.io:28657"
+LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
+BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
+TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+
+echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH && sleep 2
+
+sed -i -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
+s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
+s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
+s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.sei/config/config.toml
 
 sudo systemctl daemon-reload
 sudo systemctl enable seid
