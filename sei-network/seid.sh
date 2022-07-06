@@ -45,7 +45,7 @@ echo -e "\e[1m\e[31m[+] Update && Dependencies... \e[0m" && sleep 1
 echo
 sudo apt update && sudo apt upgrade -y
 echo
-sudo apt install -y make gcc jq curl git
+sudo apt install curl build-essential git wget jq make gcc tmux -y
 echo
 # install go
 ver="1.18.2"
