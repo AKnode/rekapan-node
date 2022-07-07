@@ -139,8 +139,7 @@ sudo systemctl restart seid
 
 echo
 echo
-echo 'INSTALASI SELESAI  🚀 '
-echo
+echo -e "Your SEI node \e[32minstalled and works\e[39m!"
 echo -e 'untuk mengecek logs: \e[1m\e[32msudo journalctl -u seid -f --no-hostname -o cat\e[0m'
 echo -e "untuk mengecek status sync: \e[1m\e[32mseid status 2>&1 | jq .SyncInfo\e[0m"
 
