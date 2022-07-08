@@ -1,10 +1,11 @@
 
-sei-network testnet GUIDE
+sei-network testnet GUIDE manuals
 @paperhang
 
-## sei-network testnet GUIDE: `sei-testnet-2`
+## sei-network testnet GUIDE manuals: `sei-testnet-2`
 - Official link link is [here](https://docs.seinetwork.io/nodes-and-validators/joining-testnets)
 - Link explorer[Explorer](https://sei.explorers.guru/)
+- All task Sei Network Incentivized Testnet [Heree](https://3pgv.notion.site/Sei-Network-Incentivized-Testnet-Seinami-1f3de71c76c24d4f862af936f0a5fe04)
 # Instructions
 #### Manual Installation
 ```
