@@ -69,11 +69,8 @@ seid version
 # replace nodejumper with your own moniker, if you'd like
 seid init $NODENAME --chain-id $SEI_CHAIN_ID
 
-curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/genesis.json > ~/.sei/config/genesis.json
-sha256sum $HOME/.sei/config/genesis.json
-
-curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-testnet-2/addrbook.json > ~/.sei/config/addrbook.json
-sha256sum $HOME/.sei/config/addrbook.json
+wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/genesis.json"
+wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/addrbook.json"
 
 # set peers and seeds
 SEEDS=""
@@ -107,7 +104,7 @@ sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.sei/config/config.tom
 # reset
 seid tendermint unsafe-reset-all --home $HOME/.sei
 
-echo -e "\e[1m\e[32m4. Starting service... \e[0m" && sleep 1
+echo -e "\e[1m\e[31m[+] Starting service... \e[0m" && sleep 1
 # create service
 sudo tee /etc/systemd/system/seid.service > /dev/null <<EOF
 [Unit]
