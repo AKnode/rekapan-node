@@ -78,7 +78,7 @@ wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-p
 wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/addrbook.json"
 
 # set peers and seeds
-SEEDS=""
+SEEDS="6a600e44396aafa3f64c73e0eb311f0e8454dd57@sei-testnet-2.seed.rhinostake.com:16659"
 PEERS=""
 sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.sei/config/config.toml
 
@@ -124,6 +124,24 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
+
+sudo systemctl stop seid
+seid tendermint unsafe-reset-all --home $HOME/.sei
+
+wget -O $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/addrbook.json"
+
+SNAP_RPC="http://116.203.35.46:36657"
+
+LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
+BLOCK_HEIGHT=$((LATEST_HEIGHT - 1000)); \
+TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+
+sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
+s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
+s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
+s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"| ; \
+s|^(seeds[[:space:]]+=[[:space:]]+).*$|\1\"\"|" $HOME/.sei/config/config.toml
+sudo systemctl restart seid && journalctl -u seid -f -o cat
 
 # start service
 sudo systemctl daemon-reload
