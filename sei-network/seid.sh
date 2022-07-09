@@ -48,27 +48,32 @@ echo
 sudo apt install curl build-essential git wget jq make gcc tmux -y
 echo
 # install go
-wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
-sudo tar -xvf go1.18.3.linux-amd64.tar.gz
-sudo mv go /usr/local
+ver="1.18.2"
+cd $HOME
+wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
+sudo rm -rf /usr/local/go
+sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
+rm "go$ver.linux-amd64.tar.gz"
 echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
 go version
-echo
-echo -e "\e[1m\e[31m[+] build binary... \e[0m" && sleep 1
-echo
+
+echo -e "\e[1m\e[31m[+] building binaries... \e[0m" && sleep 1
 # download binary
 cd $HOME
-rm -rf sei-chain
-git clone https://github.com/sei-protocol/sei-chain.git
-cd sei-chain
+git clone https://github.com/sei-protocol/sei-chain.git && cd sei-chain
 git checkout 1.0.6beta
-make install
-seid version
+make install 
 
-# replace nodejumper with your own moniker, if you'd like
+# config
+seid config chain-id $SEI_CHAIN_ID
+seid config keyring-backend test
+seid config node tcp://localhost:${SEI_PORT}657
+
+# init
 seid init $NODENAME --chain-id $SEI_CHAIN_ID
 
+# download genesis and addrbook
 wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/genesis.json"
 wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/addrbook.json"
 
@@ -104,7 +109,7 @@ sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.sei/config/config.tom
 # reset
 seid tendermint unsafe-reset-all --home $HOME/.sei
 
-echo -e "\e[1m\e[31m[+] Starting service... \e[0m" && sleep 1
+echo -e "\e[1m\e[[31m[+] Starting service... \e[0m" && sleep 1
 # create service
 sudo tee /etc/systemd/system/seid.service > /dev/null <<EOF
 [Unit]
