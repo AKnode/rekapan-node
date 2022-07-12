@@ -30,7 +30,7 @@ if [ ! $WALLET ]; then
     read -p "NAME WALLET 👉  : " WALLET
 	echo "export WALLET=$WALLET" >> $HOME/.bash_profile
 fi
-echo "export SEI_CHAIN_ID=sei-devnet-1" >> $HOME/.bash_profile
+echo "export SEI_CHAIN_ID=atlantic-1" >> $HOME/.bash_profile
 echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 echo
@@ -74,12 +74,12 @@ seid config node tcp://localhost:${SEI_PORT}657
 seid init $NODENAME --chain-id $SEI_CHAIN_ID
 
 # download genesis and addrbook
-wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/genesis.json"
-wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/addrbook.json"
+wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-incentivized-testnet/genesis.json"
+wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-incentivized-testnet/addrbook.json"
 
 # set peers and seeds
-SEEDS="6a600e44396aafa3f64c73e0eb311f0e8454dd57@sei-testnet-2.seed.rhinostake.com:16659"
-PEERS=""
+SEED="df1f6617ff5acdc85d9daa890300a57a9d956e5e@sei-atlantic-1.seed.rhinostake.com:16660"
+PEERS="38b4d78c7d6582fb170f6c19330a7e37e6964212@194.163.189.114:46656,6c27c768936ff8eebde94fe898b54df71f936e48@47.156.153.124:56656"
 sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.sei/config/config.toml
 
 # set custom ports
@@ -125,23 +125,24 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOF
 
-sudo systemctl stop seid
-seid tendermint unsafe-reset-all --home $HOME/.sei
+RPC="http://rpc2.bonded.zone:21157"
 
-wget -O $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-devnet-1/addrbook.json"
+LATEST_HEIGHT=$(curl -s $RPC/block | jq -r .result.block.header.height); \
+BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
+TRUST_HASH=$(curl -s "$RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
 
-SNAP_RPC="http://116.203.35.46:36657"
+echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH
 
-LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
-BLOCK_HEIGHT=$((LATEST_HEIGHT - 1000)); \
-TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+sudo systemctl stop seid && seid tendermint unsafe-reset-all
+
+peers="3f6e68bd476a7cd3f491105da50306f8ebb74643@rpc2.bonded.zone:21156"
+sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$peers\"/" $HOME/.sei/config/config.toml
 
 sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
-s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
+s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$RPC,$RPC\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"| ; \
 s|^(seeds[[:space:]]+=[[:space:]]+).*$|\1\"\"|" $HOME/.sei/config/config.toml
-sudo systemctl restart seid && journalctl -u seid -f -o cat
 
 # start service
 sudo systemctl daemon-reload
