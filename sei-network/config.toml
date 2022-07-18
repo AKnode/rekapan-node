@@ -103,14 +103,14 @@ port = 3001
 id = 'atlantic-1'
 
 # Specify the RPC address and port where the chain RPC server listens on. Required
-rpc_addr = 'http://127.0.0.1:12657'
+rpc_addr = 'http://sei-remote-ip:12657'
 
 # Specify the GRPC address and port where the chain GRPC server listens on. Required
-grpc_addr = 'http://0.0.0.0:12090'
+grpc_addr = 'http://sei-remote-ip:12090'
 
 # Specify the WebSocket address and port where the chain WebSocket server
 # listens on. Required
-websocket_addr = 'ws://127.0.0.1:12657/websocket'
+websocket_addr = 'ws://sei-remote-ip:12657/websocket'
 
 # Specify the maximum amount of time (duration) that the RPC requests should
 # take before timing out. Default: 10s (10 seconds)
