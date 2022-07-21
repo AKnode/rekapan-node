@@ -81,8 +81,8 @@ wget -qO $HOME/.stride/config/genesis.json "https://raw.githubusercontent.com/St
 
 #persistent peers
 SEEDS="baee9ccc2496c2e3bebd54d369c3b788f9473be9@seedv1.poolparty.stridenet.co:26656"
-peers="f1cd1d30c51ea1f1431d7da718f923f6c70ebc80@rpc2.bonded.zone:20156"
-sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$peers\"/" $HOME/.stride/config/config.toml
+PEERS=""
+sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.stride/config/config.toml
 
 #custom port
 sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:${STRIDE_PORT}658\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${STRIDE_PORT}657\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${STRIDE_PORT}060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${STRIDE_PORT}656\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":${STRIDE_PORT}660\"%" $HOME/.stride/config/config.toml
@@ -103,6 +103,7 @@ sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0ustrd\"/" $HOME/.s
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.stride/config/config.toml
 
 strided tendermint unsafe-reset-all --home $HOME/.stride
+
 echo -e "\e[1m\e[31m[+] create service... \e[0m" && sleep 1
 #crate serivce
 sudo tee /etc/systemd/system/strided.service > /dev/null <<EOF
@@ -123,31 +124,6 @@ EOF
 
 sudo systemctl daemon-reload
 sudo systemctl enable strided
-sudo systemctl restart strided
-
-sudo systemctl stop strided
-strided tendermint unsafe-reset-all --home $HOME/.stride
-
-#SEt rpc
-RPC="http://rpc2.bonded.zone:20157"
-
-#set variable
-LATEST_HEIGHT=$(curl -s $RPC/block | jq -r .result.block.header.height); \
-BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
-TRUST_HASH=$(curl -s "$RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
-
-echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH && sleep 2
-
-#persistent peers
-peers="f1cd1d30c51ea1f1431d7da718f923f6c70ebc80@rpc2.bonded.zone:20156"
-sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$peers\"/" $HOME/.stride/config/config.toml
-
-sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
-s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$RPC,$RPC\"| ; \
-s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
-s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"| ; \
-s|^(seeds[[:space:]]+=[[:space:]]+).*$|\1\"\"|" $HOME/.stride/config/config.toml
-
 sudo systemctl restart strided
 
 echo
