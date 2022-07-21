@@ -29,7 +29,7 @@ echo "export NODENAME=$NODENAME" >> $HOME/.bash_profile
 if [ ! $WALLET ]; then
 	echo "export WALLET=wallet" >> $HOME/.bash_profile
 fi
-echo "export STRIDE_CHAIN_ID=STRIDE" >> $HOME/.bash_profile
+echo "export STRIDE_CHAIN_ID=STRIDE-1" >> $HOME/.bash_profile
 echo "export STRIDE_PORT=${STRIDE_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 echo
